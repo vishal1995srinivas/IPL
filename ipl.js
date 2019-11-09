@@ -195,5 +195,101 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
 //----------------------------Finally done-------------------------------------------------------------------
 });
  });
-/***********************5th query on process***************************************************************/
+/***********************Bowlers with most number of maidens********************************************/
+
+   CSVToJSON().fromFile("./deliveries.csv").then(throws => {
+    let bowler = {};
+    let buffer = {
+        'first': [0,0]
+    };
+        for(match of throws)
+        {
+           
+                if(Object.keys(buffer)[0]=='first')
+                {
+                   buffer[match.bowler] = buffer[Object.keys(buffer)[0]];
+                   delete buffer[Object.keys(buffer)[0]];
+                }
+                if(buffer.hasOwnProperty(match.bowler) == true)
+                {
+                    buffer[match.bowler][0] += parseInt(match.total_runs);
+                    buffer[match.bowler][1] += 1;
+                    //console.log(buffer);
+                    if(buffer[match.bowler][1] == 6)
+                    {
+                        if(buffer[match.bowler][0] == 0)
+                        {
+                            
+                            if(bowler[match.bowler] == undefined)
+                            {
+                               // console.log(match.bowler);
+                               // 
+                                bowler[match.bowler] = new Array();
+                                bowler[match.bowler][0] = 0;
+                               
+                            }
+                            if(bowler.hasOwnProperty(match.bowler) == true)
+                            {
+                                //console.log(match.bowler);
+                                bowler[match.bowler][0] += 1; 
+                            }
+                        }
+
+                    }
+                }
+                if(buffer.hasOwnProperty(match.bowler) == false)
+                {
+                    buffer[match.bowler] = buffer[Object.keys(buffer)[0]];
+                    delete buffer[Object.keys(buffer)[0]];
+                    buffer[match.bowler][0] = 0;
+                    buffer[match.bowler][0] = parseInt(match.total_runs);
+                    buffer[match.bowler][1] = 1;
+                }
+        }
+  
+    let sort = [];
+    let final = {};
+    //Getting economy rate and popping out balls!!!!!! ---------------------------------------------
+    for(key in bowler)
+    {
+      sort.push(bowler[key][0]);
+    }
+    sort.sort(function(a, b){return b-a});
+    /*
+    bubble_Sort(sort);
+    //to sort  - bubble sort-----------------------------------
+    function swap(arr, first_Index, second_Index){
+        var temp = arr[first_Index];
+        arr[first_Index] = arr[second_Index];
+        arr[second_Index] = temp;
+    }
+    function bubble_Sort(arr){
+        var len = arr.length,
+            i, j, stop;
+    
+        for (i=0; i < len; i++){
+            for (j=0, stop=len-i; j < stop; j++){
+                if (arr[j] > arr[j+1]){
+                    swap(arr, j, j+1);
+                }
+            }
+        }
+        sort = arr;
+    }*/
+   //Matching bowler(key) with maiden values------------------------------------------------------------------
+    for(let i=0;i<sort.length;i++)
+    {
+        for(key in bowler)
+        {
+           if(sort[i] == bowler[key][0])
+           {
+               final[key] = new Array();
+               final[key].push(sort[i]);
+           } 
+       }
+    }
+    console.log("Top bowlers of most number of maiden overs\n",final);
+//----------------------------Finally done-------------------------------------------------------------------*/
+});
+
 
