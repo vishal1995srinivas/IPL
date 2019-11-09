@@ -4,32 +4,32 @@
 2. the number of matches won of all teams over all the years of IPL. - completed
 3. extra runs conceded per team in 2016.- completed 
 4. the top economical bowlers in 2015 - to be done tomo 
-5. Discuss a "Story" you want to tell with the given data. i.e. write a query of your own and find an interesting statistic to be done tomo
+5. Discuss a "Story" you want to tell with the given data. i.e. write a query of your own and find an interesting statistic-  to be done tomo
 */
 
 const CSVToJSON = require("csvtojson");
 const FileSystem = require("fs");
-/******Second query solution **************************************************************/ 
+/******Second query solution **************************************************************/
 CSVToJSON().fromFile("./matches.csv").then(matches => {
    // console.log(source);
    let output = {};
-    let result = matches.map(a => a.winner);
+    let result1 = matches.map(a => a.winner);
    // console.log(result);
-    for(let i=0;i<result.length;i++)
+    for(let i=0;i<result1.length;i++)
     {   
-        if(result[i].length == 0)
+        if(result1[i].length == 0)
         {
-            result[i] = 'No Result';
+            result1[i] = 'No Result';
         }
-        if(output[result[i]]==undefined)
+        if(output[result1[i]]==undefined)
         {
-            output[result[i]] = new Array();
-            output[result[i]][0] = 0;
+            output[result1[i]] = new Array();
+            output[result1[i]][0] = 0;
            // output[result[i]].push(1);
         }
-        if(output.hasOwnProperty(result[i])==true)
+        if(output.hasOwnProperty(result1[i])==true)
         {
-            output[result[i]][0] += 1; 
+            output[result1[i]][0] += 1; 
         }
 
     }
@@ -39,28 +39,28 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
 /******************First query solution**************************************************/
 CSVToJSON().fromFile("./matches.csv").then(matches => {
     // console.log(source);
-    let output = {};
+    let output_2 = {};
      let result = matches.map(a => a.season);
     // console.log(result);
      for(let i=0;i<result.length;i++)
      {   
          
-         if(output[result[i]]==undefined)
+         if(output_2[result[i]]==undefined)
          {
-             output[result[i]] = new Array();
-             output[result[i]][0] = 0;
+             output_2[result[i]] = new Array();
+             output_2[result[i]][0] = 0;
             // output[result[i]].push(1);
          }
-         if(output.hasOwnProperty(result[i])==true)
+         if(output_2.hasOwnProperty(result[i])==true)
          {
-             output[result[i]][0] += 1; 
+             output_2[result[i]][0] += 1; 
          }
  
      }
-     console.log("Total number of matches played per year as follows \n",output);
+     console.log("Total number of matches played per year as follows \n",output_2);
  
  });
-/**************************Third query solution*******************************************************/
+/**************************Third query solution******************************************************/
 CSVToJSON().fromFile("./matches.csv").then(matches => {
    
 
@@ -104,11 +104,8 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
 });
   
  });
- /**************************Fourth query solution ****************************************************** */
- 
+ /**************************Fourth query solution***************************************************************************/
 CSVToJSON().fromFile("./matches.csv").then(matches => {
-   
-
     let match_id_2015 = [];
     for(count of matches)
     {
@@ -147,16 +144,19 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
         }
 
     }
+  //  console.log(total_runs);
     //Matched 2015 match-ids in deiveries.csv and we got 'bowler name': [total runs , total delveries]-------------------
     let sort = [];
     let economy = [];
     //Getting economy rate and popping out balls!!!!!! ---------------------------------------------
     for(key in total_runs)
     {
-      total_runs[key][0] = ( total_runs[key][0] / total_runs[key][1] ) * 6;
+      total_runs[key][0] = (( total_runs[key][0] / total_runs[key][1] ) * 6).toFixed(2);
       total_runs[key].pop();
       sort.push(total_runs[key][0]);
     }
+    sort.sort(function(a, b){return a-b});
+    /*
     bubble_Sort(sort);
     //to find most economical bowler - bubble sort-----------------------------------
     function swap(arr, first_Index, second_Index){
@@ -179,7 +179,7 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
     
         sort = arr;
     }
-   //Matching bowler(key) with economy rate------------------------------------------------------------------
+   //Matching bowler(key) with economy rate------------------------------------------------------------------*/
     for(let i=0;i<sort.length;i++)
     {
         for(key in total_runs)
@@ -195,7 +195,7 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
 //----------------------------Finally done-------------------------------------------------------------------
 });
  });
-/***********************Bowlers with most number of maidens********************************************/
+ /*****************Bowlers with most number of maidens***********************************************************/
 
    CSVToJSON().fromFile("./deliveries.csv").then(throws => {
     let bowler = {};
@@ -289,7 +289,7 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
        }
     }
     console.log("Top bowlers of most number of maiden overs\n",final);
-//----------------------------Finally done-------------------------------------------------------------------*/
+//----------------------------Finally done-------------------------------------------------------------------
 });
 
 
