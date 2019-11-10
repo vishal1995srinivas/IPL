@@ -9,7 +9,7 @@
 
 const CSVToJSON = require("csvtojson");
 const FileSystem = require("fs");
-/******Second query solution **************************************************************/
+/******Second query solution  - verified **************************************************************/
 CSVToJSON().fromFile("./matches.csv").then(matches => {
    // console.log(source);
    let output = {};
@@ -36,7 +36,7 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
     console.log("The number of matches won of all teams over all the years of IPL are as follows \n",output);
 
 });
-/******************First query solution**************************************************/
+/******************First query solution - verified**************************************************/
 CSVToJSON().fromFile("./matches.csv").then(matches => {
     // console.log(source);
     let output_2 = {};
@@ -131,20 +131,26 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
                 {
                     total_runs[match.bowler] = new Array();
                     total_runs[match.bowler][0] = 0;
-                    total_runs[match.bowler][1] = 1;
+                    total_runs[match.bowler][1] = 0;
                 }
                 if(total_runs.hasOwnProperty(match.bowler)==true)
                 {
                    
                    total_runs[match.bowler][0] += parseInt(match.total_runs); // no of runs
                    total_runs[match.bowler][1] += 1; // no of deliveries
+                   if(match.wide_runs > 0 || match.noball_runs > 0)
+                   {
+                       total_runs[match.bowler][1] -=1;
+
+                   }
+                    
 
                 }
             }
         }
 
     }
-  //  console.log(total_runs);
+   //console.log(total_runs);
     //Matched 2015 match-ids in deiveries.csv and we got 'bowler name': [total runs , total delveries]-------------------
     let sort = [];
     let economy = [];
@@ -156,30 +162,9 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
       sort.push(total_runs[key][0]);
     }
     sort.sort(function(a, b){return a-b});
-    /*
-    bubble_Sort(sort);
-    //to find most economical bowler - bubble sort-----------------------------------
-    function swap(arr, first_Index, second_Index){
-        var temp = arr[first_Index];
-        arr[first_Index] = arr[second_Index];
-        arr[second_Index] = temp;
-    }
-    function bubble_Sort(arr){
-    
-        var len = arr.length,
-            i, j, stop;
-    
-        for (i=0; i < len; i++){
-            for (j=0, stop=len-i; j < stop; j++){
-                if (arr[j] > arr[j+1]){
-                    swap(arr, j, j+1);
-                }
-            }
-        }
-    
-        sort = arr;
-    }
-   //Matching bowler(key) with economy rate------------------------------------------------------------------*/
+   
+   //Matching bowler(key) with economy rate------------------------------------------------------------------
+  
     for(let i=0;i<sort.length;i++)
     {
         for(key in total_runs)
@@ -255,28 +240,9 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
       sort.push(bowler[key][0]);
     }
     sort.sort(function(a, b){return b-a});
-    /*
-    bubble_Sort(sort);
-    //to sort  - bubble sort-----------------------------------
-    function swap(arr, first_Index, second_Index){
-        var temp = arr[first_Index];
-        arr[first_Index] = arr[second_Index];
-        arr[second_Index] = temp;
-    }
-    function bubble_Sort(arr){
-        var len = arr.length,
-            i, j, stop;
-    
-        for (i=0; i < len; i++){
-            for (j=0, stop=len-i; j < stop; j++){
-                if (arr[j] > arr[j+1]){
-                    swap(arr, j, j+1);
-                }
-            }
-        }
-        sort = arr;
-    }*/
+  
    //Matching bowler(key) with maiden values------------------------------------------------------------------
+   
     for(let i=0;i<sort.length;i++)
     {
         for(key in bowler)
