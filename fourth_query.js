@@ -1,77 +1,74 @@
-function fourth_query(matches, deliveries_2015)
-{
-    let match_id_2015 = [];
-    for(count of matches)
-    {
-        if(count.season == '2015')
-        {
-            match_id_2015.push(count.id);
+// Query : To get top economical bowlers in the year 2015 with their economy rate.
+/*Approach :
+1. Get the match IDs of 2015 from matches.csv file and store in matchIDs2015 array.
+2. Create a Total runs by bowler object.
+3. Create separate bowler name array with total runs and total deliveries and store inside total runs by bowler object.Do not neglect wide balls and no balls
+4. Calculate economy rate of all the bowlers = (total runs / total deliveries) * 6 and round it off to 2 decimal places.
+5. Create sort array and store all the economy rates in it and sort it in ascending order 
+6. Match with the bowler name and push to the EconomyRatesOfBowlers object and display it.
+*/
+function fourth_query(matches, deliveries_2015) {
+  let matchIds2015 = [];
+  for (count of matches) {
+    if (count.season == "2015") {
+      matchIds2015.push(count.id);
+    }
+  }
+  //Now we got match ids of 2015 by above for loop----------------------------------------------------
+
+  let totalRunsByBowler = {};
+  // console.log(deliveries[0]);/*
+  for (let i = 0; i < matchIds2015.length; i++) {
+    // console.log(match_id[i]);
+    for (match of deliveries_2015) {
+      // console.log(match.bowling_team);
+      if (matchIds2015[i] == match.match_id) {
+        if (totalRunsByBowler[match.bowler] == undefined) {
+          totalRunsByBowler[match.bowler] = new Array();
+          totalRunsByBowler[match.bowler][0] = 0;
+          totalRunsByBowler[match.bowler][1] = 0;
         }
-    }
-   //Now we got match ids of 2015 by above for loop----------------------------------------------------
-   
-    let total_runs = {};
-   // console.log(deliveries[0]);/*
-    for(let i = 0;i < match_id_2015.length; i++ )
-    {
-      // console.log(match_id[i]);
-        for(match of deliveries_2015)
-        {
-           // console.log(match.bowling_team);
-            if(match_id_2015[i] == match.match_id)
-            {
-               
-                if(total_runs[match.bowler] == undefined)
-                {
-                    total_runs[match.bowler] = new Array();
-                    total_runs[match.bowler][0] = 0;
-                    total_runs[match.bowler][1] = 0;
-                }
-                if(total_runs.hasOwnProperty(match.bowler)==true)
-                {
-                   
-                   total_runs[match.bowler][0] += parseInt(match.total_runs); // no of runs
-                   total_runs[match.bowler][1] += 1; // no of deliveries
-                   if(match.wide_runs > 0 || match.noball_runs > 0)
-                   {
-                       total_runs[match.bowler][1] -=1;
-
-                   }
-                    
-
-                }
-            }
+        if (totalRunsByBowler.hasOwnProperty(match.bowler) == true) {
+          totalRunsByBowler[match.bowler][0] += parseInt(match.total_runs); // no of runs
+          totalRunsByBowler[match.bowler][1] += 1; // no of deliveries
+          if (match.wide_runs > 0 || match.noball_runs > 0) {
+            totalRunsByBowler[match.bowler][1] -= 1;
+          }
         }
+      }
+    }
+  }
+  //console.log(totalRunsByBowler);
+  //Matched 2015 match-ids in deiveries.csv and we got 'bowler name': [total runs , total delveries]-------------------
+  let sort = [];
+  let economyRatesOfBowlers = {};
+  //Getting economy rate and deleting deliveries from respected bowler name array in totalRunsByBowler object. ---------------------------------------------
+  for (key in totalRunsByBowler) {
+    totalRunsByBowler[key][0] = (
+      (totalRunsByBowler[key][0] / totalRunsByBowler[key][1]) *
+      6
+    ).toFixed(2);
+    totalRunsByBowler[key].pop();
+    sort.push(totalRunsByBowler[key][0]);
+  }
+  sort.sort(function(a, b) {
+    return a - b;
+  });
 
-    }
-   //console.log(total_runs);
-    //Matched 2015 match-ids in deiveries.csv and we got 'bowler name': [total runs , total delveries]-------------------
-    let sort = [];
-    let economy = {};
-    //Getting economy rate and popping out balls!!!!!! ---------------------------------------------
-    for(key in total_runs)
-    {
-      total_runs[key][0] = (( total_runs[key][0] / total_runs[key][1] ) * 6).toFixed(2);
-      total_runs[key].pop();
-      sort.push(total_runs[key][0]);
-    }
-    sort.sort(function(a, b){return a-b});
-   
-   //Matching bowler(key) with economy rate------------------------------------------------------------------
-  
-    for(let i=0;i<sort.length;i++)
-    {
-        for(key in total_runs)
-        {
-           if(sort[i] == total_runs[key][0])
-           {
-               economy[key] = new Array();
-               economy[key].push(sort[i]);
-           } 
-       }
-    }
-    console.log("Top economical bowlers of 2015 with their economy rate are as follows \n",economy);
-//----------------------------Finally done-------------------------------------------------------------------
+  //Matching bowler(key) with economyRatesOfBowlers rate------------------------------------------------------------------
 
- }
- module.exports = fourth_query;
+  for (let i = 0; i < sort.length; i++) {
+    for (key in totalRunsByBowler) {
+      if (sort[i] == totalRunsByBowler[key][0]) {
+        economyRatesOfBowlers[key] = new Array();
+        economyRatesOfBowlers[key].push(sort[i]);
+      }
+    }
+  }
+  console.log(
+    "Top economical bowlers of 2015 with their economy rate are as follows \n",
+    economyRatesOfBowlers
+  );
+  //----------------------------Finally done-------------------------------------------------------------------
+}
+module.exports = fourth_query;

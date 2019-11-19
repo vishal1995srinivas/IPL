@@ -1,28 +1,25 @@
-function second_query(matches)
-   {
-    let output = {};
-    let result1 = matches.map(a => a.winner);
-   // console.log(result);
-    for(let i=0;i<result1.length;i++)
-    {   
-        if(result1[i].length == 0)
-        {
-            result1[i] = 'No Result';
-        }
-        if(output[result1[i]]==undefined)
-        {
-            output[result1[i]] = new Array();
-            output[result1[i]][0] = 0;
-           // output[result[i]].push(1);
-        }
-        if(output.hasOwnProperty(result1[i])==true)
-        {
-            output[result1[i]][0] += 1; 
-        }
-
+// Query : To get number of matches won by all teams over all these years of IPL 
+function second_query(matches) {
+  let matchesWonByAllTeams = {};
+  let winner = matches.map(a => a.winner);
+  // console.log(result);
+  for (let i = 0; i < winner.length; i++) {
+    if (winner[i].length == 0) {
+      winner[i] = "No Result";
     }
-    console.log("The number of matches won of all teams over all the years of IPL are as follows \n", output);
+    if (matchesWonByAllTeams[winner[i]] == undefined) {
+      matchesWonByAllTeams[winner[i]] = new Array();
+      matchesWonByAllTeams[winner[i]][0] = 0;
+      // matchesWonByAllTeams[result[i]].push(1);
+    }
+    if (matchesWonByAllTeams.hasOwnProperty(winner[i]) == true) {
+      matchesWonByAllTeams[winner[i]][0] += 1;
+    }
+  }
+  console.log(
+    "The number of matches won of all teams over all the years of IPL are as follows \n",
+    matchesWonByAllTeams
+  );
+}
 
-   }
-
-   module.exports = second_query;
+module.exports = second_query;
