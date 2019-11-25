@@ -9,8 +9,10 @@ CSVToJSON().fromFile("./matches.csv").then(matches => {
         const totalExtraRunsScoredByAllTeams = require('./third_query');
         const topEconomyBowlers2015 = require('./fourth_query');
         const topMaidenOverBowlers = require('./fifth_query');
+        const specialQuery = require('./special_query');
         totalExtraRunsScoredByAllTeams(matches, deliveries);
         topEconomyBowlers2015(matches, deliveries);
         topMaidenOverBowlers(deliveries);
+        specialQuery(deliveries);
     });
 });
