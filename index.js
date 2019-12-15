@@ -1,18 +1,22 @@
 const CSVToJSON = require("csvtojson");
 const FileSystem = require("fs");
-CSVToJSON().fromFile("./matches.csv").then(matches => {
-    const totalWinsOfAllTeams = require('./second_query');
-    const totalNoOfMatchesPerYr = require('./first_query');
+CSVToJSON()
+  .fromFile("./matches.csv")
+  .then(matches => {
+    const totalWinsOfAllTeams = require("./TotalWinsOfAllTeams");
+    const totalNoOfMatchesPerYr = require("./TotalNoOfMatchesPerYr");
     totalWinsOfAllTeams(matches);
     totalNoOfMatchesPerYr(matches);
-    CSVToJSON().fromFile("./deliveries.csv").then(deliveries => {
-        const totalExtraRunsScoredByAllTeams = require('./third_query');
-        const topEconomyBowlers2015 = require('./fourth_query');
-        const topMaidenOverBowlers = require('./fifth_query');
-        const specialQuery = require('./special_query');
+    CSVToJSON()
+      .fromFile("./deliveries.csv")
+      .then(deliveries => {
+        const totalExtraRunsScoredByAllTeams = require("./totalExtraRunsScoredByAllTeams");
+        const topEconomyBowlers2015 = require("./topEconomyBowlers2015");
+        const topMaidenOverBowlers = require("./TopMaidenBowlers");
+        const BatsmanStatsUsingMapFilterReduce = require("./BatsmanStatsUsingMapFilterReduce");
         totalExtraRunsScoredByAllTeams(matches, deliveries);
         topEconomyBowlers2015(matches, deliveries);
         topMaidenOverBowlers(deliveries);
-        specialQuery(deliveries);
-    });
-});
+        BatsmanStatsUsingMapFilterReduce(deliveries, "V Kohli");
+      });
+  });
